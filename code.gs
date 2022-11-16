@@ -1,4 +1,6 @@
 var ui = SpreadsheetApp.getUi();
+var activeSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+
 function onOpen(e){
   
   ui.createMenu("NSS Batch 2022 Data").addItem("Get Email Data by Label", "getGmailEmails").addToUi();
@@ -12,7 +14,11 @@ function getGmailEmails(){
   // if (input.getSelectedButton() == ui.Button.CANCEL){
   //   return;
   // }
-  
+//  #TO CLEAR ENTIRE SHEET 
+  var clear = SpreadsheetApp.getActive().getSheetByName("Sheet1");
+  clear.clearContents();  
+  activeSheet.appendRow(["Student Name", "Email ", "Choice" , "Date" , "Subject" ,"Admission Number", "Branch"]);
+
   // var label = GmailApp.getUserLabelByName(input.getResponseText());
   var label = GmailApp.getUserLabelByName("Test-v2");
   var threads = label.getThreads();
@@ -65,7 +71,6 @@ function extractDetails(message){
   // department
   emailData.department = emailData.admissionNo.match(/(?<=[0-9])[a-zA-Z]+(?=[0-9])/).toString()
 
-  var activeSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   activeSheet.appendRow([ emailData.sName, emailData.sEmail, emailData.response, emailData.date, emailData.subject, emailData.admissionNo, emailData.department]);
   //                                                                   ^ it was body previously
 }
